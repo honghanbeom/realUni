@@ -8,8 +8,9 @@ public class PlayerController : MonoBehaviour
     private int jumpCount = 0;
     private bool isGrounded = false;
     private bool isDead = false;
+    public int mushroomCount = 0;
 
-    private Rigidbody2D playerRigidBody;
+    public Rigidbody2D playerRigidBody;
     private Animator animator;
     private AudioSource playerAudio;
 
@@ -59,13 +60,21 @@ public class PlayerController : MonoBehaviour
 
         playerRigidBody.velocity = Vector2.zero;
         isDead = true;
+
+        GameManager.instance.OnPlayerDead();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Dead" && !isDead)
         {
-            Die();    
+            Die();
+        }
+        else if ((collision.tag == "Mushroom") /*&& mushroomCount == 0*/)
+        {
+            transform.localScale = new Vector2(transform.localScale.x*1.5f, transform.localScale.y * 1.5f);
+            GameManager.instance.mushCount = 1;
+            //mushroomCount++;
         }
     }
 

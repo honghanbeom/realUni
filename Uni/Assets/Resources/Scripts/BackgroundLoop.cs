@@ -14,7 +14,7 @@ public class BackgroundLoop : MonoBehaviour {
 
     private void Update()
     {
-        if (transform.position.x <= width)
+        if (transform.position.x <= -width)
         {
             Reposition();    
         }

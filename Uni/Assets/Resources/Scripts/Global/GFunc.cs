@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -9,9 +10,9 @@ public static partial class GFunc
     // static으로 사용하는 함수
     // 랩핑
 
+
     // 전처리기의 이름 (디파인 심볼)
     [System.Diagnostics.Conditional("DEBUG_MODE")]
-
     public static void Log(object message)
     {
 #if DEBUG_MODE
@@ -45,6 +46,12 @@ public static partial class GFunc
         SceneManager.LoadScene(sceneName);
     }
 
+    // 현재 씬의 이름을 리턴한다.
+    public static string GetActiveSceneName()
+    {
+        return SceneManager.GetActiveScene().name;    
+    }
+
     // 두 벡터를 더하는 함수
     // this, origin 모든 함수 확장자 뒤에 나오기 시작함
     public static Vector2 AddVector(this Vector3 origin, Vector2 addVector)
@@ -54,5 +61,39 @@ public static partial class GFunc
         return result;
     
     }
+
+
+    // Print LogWarning when debug_mode
+    [System.Diagnostics.Conditional("DEBUG_MODE")]
+    public static void LogWarning(object message)
+    {
+#if DEBUG_MODE
+        Debug.LogWarning(message);
+#endif
+    }
+
+    // valid component check
+    public static bool isValid<T>(this T target) where T : Component // this도 generic
+    {
+        if (target == null || target == default) { return false; }
+        else { return true; }
+
+    }
+
+    // valid list component check
+    public static bool isValid<T>(this List<T> target) where T : Component // 제한 where
+    {
+        bool isInvaild = (target == null || target == default);
+        isInvaild = isInvaild || target.Count == 0;
+
+        if (isInvaild == true) { return false; }
+        else { return true; }
+
+        //List<int> intList;
+        //Debug.LogFormat("intList가 유효한지? {0}", intList.isValid());
+
+    }
+
+
 
 }
